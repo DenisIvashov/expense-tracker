@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://denisivashov.github.io/expense-tracker//sitemap.xml

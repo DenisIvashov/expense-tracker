@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Трекер расходов</title>
+    <link rel="stylesheet" href="css/style.css">
+    <meta name="description"
+        content="Бесплатный трекер расходов для семейного бюджета. Учёт доходов и расходов по категориям, история по месяцам.">
+    <meta name="keywords" content="трекер расходов, семейный бюджет, учёт финансов, доходы, расходы, бесплатно">
+    <meta name="author" content="Денис Ивашов">
+    <meta name="robots" content="index, follow">
+</head>
+<body>
+    <div class="hb-month-nav">
+        <button id="prevMonth">←</button>
+        <span id="currentMonthLabel">Август 2026</span>
+        <button id="nextMonth">→</button>
+    </div>
+    <div class="hb-totals">
+        <div class="hb-stat">Доходы: <span id="totalIncome">0 ₽</span></div>
+        <div class="hb-stat">Расходы: <span id="totalExpense">0 ₽</span></div>
+    </div>
+    <div class="hb-balance" id="hbBalance">
+        Баланс: 0 ₽
+    </div>
+    <div class="hb-columns">
+        <div class="hb-card">
+            <div class="hb-section-title">
+                Доходы
+            </div>
+            <div class="hb-form-row">
+                <input type="text" class="hb-input" id="hbIncomeName" placeholder="Название">
+                <input type="number" class="hb-input" id="hbIncomeAmount" placeholder="Сумма">
+                <input type="date" class="hb-input" id="hbIncomeDate">
+                <button class="hb-add-btn" id="hbAddIncome" type="button">Добавить доход</button>
+            </div>
+            <div class="hb-list" id="hbIncomeList">
+                <div class="hb-empty">
+                    Нет записей за этот месяц. Начните добавлять доходы и расходы.
+                </div>
+            </div>
+        </div>
+        <div class="hb-card">
+            <div class="hb-section-title">
+                Расходы
+            </div>
+            <div class="hb-form-row">
+                <input type="text" class="hb-input" id="hbExpenceName" placeholder="Название">
+                <input type="number" class="hb-input" id="hbExpenseAmount" placeholder="Сумма">
+                <select id="hbExpenceCat" class="hb-select">
+                    <option value="housing">🏠 Жильё</option>
+                    <option value="food">🛒 Продукты</option>
+                    <option value="transport">🚗 Транспорт</option>
+                    <option value="utilities">💡 Коммунальные услуги</option>
+                    <option value="childcare">👶 Дети</option>
+                    <option value="healthcare">🏥 Здоровье</option>
+                    <option value="education">📚 Образование</option>
+                    <option value="entertainment">🎬 Развлечения</option>
+                    <option value="savings">💳 Кредит</option>
+                    <option value="credit">👕 Одежда</option>
+                    <option value="other">📦 Другое</option>
+                </select>
+                <input type="date" class="hb-input" id="hbExpenseDate">
+                <button class="hb-add-btn" id="hbAddExpence" type="button">Добавить расход</button>
+            </div>
+            <div class="hb-list" id="hbExpenceList"></div>
+        </div>
+        <div class="hb-card">
+            <span class="hb-card-title">Расходы по категориям</span>
+            <div id="categoryStats"></div>
+        </div>
+    </div>
+    <footer style="text-align: center; padding: 20px; color: #8494a7; font-size: 14px;">
+        <p>Если приложение было полезным, вы можете поддержать автора:</p>
+        <p>💳 Втб: +7 913 960-60-22</p>
+        <p>💳 Т-Банк: +7 913 960-60-22</p>
+        <p>Спасибо! ❤️</p>
+    </footer>
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
