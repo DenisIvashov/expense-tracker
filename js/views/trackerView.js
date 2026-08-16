@@ -1,5 +1,20 @@
 import { getState, addRecord, deleteRecordById, setCurrentMonth, getRecordsByMonth } from "../state.js";
 
+const incomeCategories = {
+    'зарплата': '💼 Зарплата',
+    'аванс': '💼 Зарплата',
+    'подработка': '🛠️ Подработка',
+    'аренда': '🎁 Аренда',
+    'прочее': '📦 Прочее'
+};
+
+const incomeCategoryColors = {
+    '💼 Зарплата': '#4caf50',
+    '🛠️ Подработка': '#2196f3',
+    '🎁 аренда': '#ff9800',
+    '📦 Прочее': '#9e9e9e'
+};
+
 export function initTracker() {
   const hbIncomeName = document.getElementById("hbIncomeName");
   const hbIncomeAmount = document.getElementById("hbIncomeAmount");
@@ -29,12 +44,17 @@ export function initTracker() {
       return; // Выходим, не добавляем запись
     }
 
+     // Определяем категорию по названию
+    const lowerName = name.toLowerCase();
+    const category = incomeCategories[lowerName] || '📦 Прочее';
+
     let record = {
       id: Date.now(),  
       type: "income",
       month: hbIncomeDate.value.slice(0, 7),
       name: name,
       amount: amount,
+      category: category,
       date: new Date(hbIncomeDate.value + 'T00:00:00'),
     };
 
@@ -175,6 +195,29 @@ export function renderList(hbIncomeList, hbExpenceList) {
       });
     });
   };
+
+  // Статистика по категориям доходов
+  const incomeCategoryTotals = {};
+  incomeRecords.forEach(function (item) {
+      // Если у записи нет категории, ставим "📦 Прочее"
+      if (!item.category) {
+          item.category = '📦 Прочее';
+      }
+      if (!incomeCategoryTotals[item.category]) {
+          incomeCategoryTotals[item.category] = 0;
+      }
+      incomeCategoryTotals[item.category] += item.amount;
+  });
+  const incomeCategoryStats = document.getElementById('incomeCategoryStats');
+  if (incomeCategoryStats) {
+      incomeCategoryStats.innerHTML = '';
+      Object.keys(incomeCategoryTotals).forEach(function(category) {
+          const div = document.createElement('div');
+          div.textContent = `${category}: ${incomeCategoryTotals[category].toLocaleString('ru-RU')} ₽`;
+          div.style.color = incomeCategoryColors[category] || '#f8fafc';
+          incomeCategoryStats.appendChild(div);
+      });
+  }
 
   hbExpenceList.innerHTML = "";
 

@@ -145,7 +145,8 @@ body {
     margin-bottom: 20px;
 }
 
-#categoryStats {
+#categoryStats,
+#incomeCategoryStats {
     margin-top: 20px;
     padding: 16px;
     background: #0f1629;
