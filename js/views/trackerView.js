@@ -30,6 +30,7 @@ export function initTracker() {
   const currentMonthLabel = document.getElementById('currentMonthLabel');
   const hbIncomeDate = document.getElementById('hbIncomeDate');
   const hbExpenseDate = document.getElementById('hbExpenseDate');
+  const todayBtn = document.getElementById('todayBtn');
 
   const today = new Date().toISOString().slice(0, 10); // '2026-08-04'
   hbIncomeDate.value = today;
@@ -45,8 +46,8 @@ export function initTracker() {
     }
 
      // Определяем категорию по названию
-    const lowerName = name.toLowerCase();
-    const category = incomeCategories[lowerName] || '📦 Прочее';
+    const lowerName = name.toLowerCase(); // приводим в нижний регистр
+    const category = incomeCategories[lowerName] || '📦 Прочее'; // обращение к объекту по ключу
 
     let record = {
       id: Date.now(),  
@@ -68,6 +69,7 @@ export function initTracker() {
   hbAddExpence.addEventListener("click", function () {
     const name = hbExpenceName.value;
     const amount = Number(hbExpenseAmount.value);
+    // категории у select
     const category = hbExpenceCat.options[hbExpenceCat.selectedIndex].text;
 
     if (name === "" || isNaN(amount) || amount <= 0) {
@@ -78,11 +80,11 @@ export function initTracker() {
     let record = {
       id: Date.now(),  
       type: "expense",
-      month: hbExpenseDate.value.slice(0, 7),
+      month: hbExpenseDate.value.slice(0, 7), // Метод slice(start, end) вырезает кусок строки от 0 до 7(например: 2026-08)
       name: name,
       amount: amount,
       category: category,
-      date: new Date(hbExpenseDate.value + 'T00:00:00'),
+      date: new Date(hbExpenseDate.value + 'T00:00:00'), // чтобы не путаться с часовыми поясами
     };
 
     addRecord(record);
@@ -127,6 +129,14 @@ export function initTracker() {
     return `${newYear}-${monthStr}`;
   }
 
+  todayBtn.addEventListener('click', function() {
+    const state = getState();
+    const newMonth = new Date().toISOString().slice(0, 7);
+    setCurrentMonth(newMonth);
+    updateMonthLabel();
+    renderList(hbIncomeList, hbExpenceList);
+  });
+
   updateMonthLabel();
   renderList(hbIncomeList, hbExpenceList);
 };
@@ -168,9 +178,17 @@ export function renderList(hbIncomeList, hbExpenceList) {
     });
 
     Object.keys(grouped).forEach(function (day) {
+      // делаем подсветку сегодняшних доходов
+      const todayDay = new Date().getDate();
+
       // 1. Создать заголовок дня
       const dayHeader = document.createElement("div");
       dayHeader.textContent = day + " августа";
+
+      if (Number(day) === todayDay) {
+        dayHeader.style.color = "#ff9900";
+        dayHeader.style.fontWeight = "bold";
+      };
       hbIncomeList.appendChild(dayHeader);
 
       // 2. Отрисовать записи этого дня
@@ -236,9 +254,18 @@ export function renderList(hbIncomeList, hbExpenceList) {
       groupedExpenses[day].push(item);
     });
     Object.keys(groupedExpenses).forEach(function (day) {
+      // делаем подсветку сегодняшних расходов
+      const todayDay = new Date().getDate();
+
       // 1. Создать заголовок дня (как для доходов)
       const dayHeader = document.createElement('div');
       dayHeader.textContent = day + ' августа';
+
+      if (Number(day) === todayDay) {
+        dayHeader.style.color = "#ff9900";
+        dayHeader.style.fontWeight = "bold";
+      };
+
       hbExpenceList.appendChild(dayHeader);
 
       groupedExpenses[day].forEach(function(item) {
