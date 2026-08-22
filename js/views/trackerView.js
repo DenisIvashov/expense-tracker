@@ -31,6 +31,7 @@ export function initTracker() {
   const hbIncomeDate = document.getElementById('hbIncomeDate');
   const hbExpenseDate = document.getElementById('hbExpenseDate');
   const todayBtn = document.getElementById('todayBtn');
+  const exportCsvBtn = document.getElementById('exportCsvBtn');
 
   const today = new Date().toISOString().slice(0, 10); // '2026-08-04'
   hbIncomeDate.value = today;
@@ -137,6 +138,23 @@ export function initTracker() {
     renderList(hbIncomeList, hbExpenceList);
   });
 
+  exportCsvBtn.addEventListener('click', function() {
+    const state = getState();
+    const records = getRecordsByMonth(state.currentMonth);
+
+    let csv = "Дата,Тип,Категория,Название,Сумма\n";
+
+    records.forEach(function (record) {
+      csv += `${new Date(record.date).toLocaleDateString('ru-RU')},${record.type},${record.category},${record.name},${record.amount}\n`;
+    });
+
+    const blob = new Blob(['\uFEFF' + csv], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `tracker_${state.currentMonth}.csv`;
+    link.click();
+  })
+
   updateMonthLabel();
   renderList(hbIncomeList, hbExpenceList);
 };
@@ -179,7 +197,7 @@ export function renderList(hbIncomeList, hbExpenceList) {
 
     Object.keys(grouped).forEach(function (day) {
       // делаем подсветку сегодняшних доходов
-      const todayDay = new Date().getDate();
+      const todayDay = new Date().getDate(); // берём только число из сегдняшней даты 
 
       // 1. Создать заголовок дня
       const dayHeader = document.createElement("div");
